@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const authRouter = require('./src/routers/auth-router');
+const reqRouter = require('./src/routers/request-router');
 require('dotenv').config();
 
 
@@ -13,9 +14,10 @@ app.use(express.json());
 app.use(cors());
 app.get('/',(req,res)=>{
     res.send('I AM ALIVE');
-})
+});
+//---setting up routing---//
 app.use('/auth',authRouter);
-
+app.use('/req',reqRouter);
 
 //----setting up environment variables----//
 const PORT = process.env.PORT;
