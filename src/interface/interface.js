@@ -78,7 +78,11 @@ class Interface {
 
     //--if user is a seller--//
     if (user.role == 'seller') {
-      return user.houses;
+      const sorted = [];
+      for (let i = user.houses.length - 1; i >= 0; i--) {
+        sorted.push(user.houses[i]);
+      }
+      return sorted;
     };
 
     //---if user is admin---//
@@ -126,15 +130,15 @@ class Interface {
   //--- delete the house add for the user (seller or admin) ---//
   static delete = async (houseID, email) => {
     try {
-      const user = await UserModel.findOne({email});
-        let updatedHouses = user.houses.filter((house) => {
-          if (house._id.toString() !== houseID) {
-            return house;
-          }
-        });
-        user.houses = updatedHouses;
-        const updatedUser = await user.save();
-        return updatedUser.houses;
+      const user = await UserModel.findOne({ email });
+      let updatedHouses = user.houses.filter((house) => {
+        if (house._id.toString() !== houseID) {
+          return house;
+        }
+      });
+      user.houses = updatedHouses;
+      const updatedUser = await user.save();
+      return updatedUser.houses;
     } catch (e) {
       console.log(e);
       throw new Error(e.message);
@@ -143,11 +147,11 @@ class Interface {
   }
 
   //--- update the status of the add by the adming ---//
-  static updateStatus = async (hosueID,email,stat)=>{
-    try{
-      const user = await UserModel.findOne({email});
-      const modifiedHouses = user.houses.map((house)=>{
-        if(house._id.toString() === hosueID){
+  static updateStatus = async (hosueID, email, stat) => {
+    try {
+      const user = await UserModel.findOne({ email });
+      const modifiedHouses = user.houses.map((house) => {
+        if (house._id.toString() === hosueID) {
           house.status = stat;
         }
         return house
@@ -155,7 +159,7 @@ class Interface {
       user.houses = modifiedHouses;
       const modifiedUser = await user.save();
       return modifiedUser.houses;
-    }catch(e){
+    } catch (e) {
       throw new Error(e.message);
     }
 
