@@ -96,6 +96,7 @@ class Interface {
 
   //--- create the house sale for the user(seller) ---//
   static create = async (email, house) => {
+    console.log(house);
     let userInfo = await UserModel.findOne({ email });
     let houseData = house;
     houseData.ownerEmail = email;
