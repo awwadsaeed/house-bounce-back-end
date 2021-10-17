@@ -78,11 +78,7 @@ class Interface {
 
     //--if user is a seller--//
     if (user.role == 'seller') {
-      const sorted = [];
-      for (let i = user.houses.length - 1; i >= 0; i--) {
-        sorted.push(user.houses[i]);
-      }
-      return sorted;
+      return user.houses;
     };
 
     //---if user is admin---//
@@ -110,17 +106,17 @@ class Interface {
     return savedData.houses;
   };
 
-  static logger = (message) => {
-    console.log(message);
-  }
+
   //--- update the price for the house if its negotiable ---//
   static updatePrice = async (user, id, newPrice) => {
+    console.log(user);
     const newHouses = user.houses.map((house) => {
       if (house._id == id) {
         house.sellingPrice = newPrice;
       };
       return house;
     });
+    
     user.houses = newHouses;
     const newData = await user.save();
     return newData.houses;
