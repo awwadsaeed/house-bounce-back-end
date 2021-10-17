@@ -38,7 +38,6 @@ async function readHandler(req, res) {
 //---'/create' handler---//
 async function createHandler(req, res) {
     try {
-        console.log(req.body);
         const { type,
             address,
             description,
@@ -73,6 +72,7 @@ async function updatePriceHandler(req, res) {
 async function deleteHandler(req, res) {
     try {
         const { houseID, ownerEmail } = req.body;
+        console.log(houseID)
         let houses = await Interface.delete(houseID, ownerEmail);
         res.status(201).json({ houses });
     } catch (error) {
@@ -85,6 +85,7 @@ async function updateStatusHandler(req, res) {
 
     try {
         const { houseID, ownerEmail, stat } = req.body;
+   
         let houses = await Interface.updateStatus(houseID, ownerEmail, stat);
         res.json({ houses });
     } catch (e) {

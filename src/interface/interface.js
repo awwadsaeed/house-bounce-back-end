@@ -106,17 +106,17 @@ class Interface {
     return savedData.houses;
   };
 
-  static logger = (message) => {
-    console.log(message);
-  }
+
   //--- update the price for the house if its negotiable ---//
   static updatePrice = async (user, id, newPrice) => {
+    console.log(user);
     const newHouses = user.houses.map((house) => {
       if (house._id == id) {
         house.sellingPrice = newPrice;
       };
       return house;
     });
+    
     user.houses = newHouses;
     const newData = await user.save();
     return newData.houses;
@@ -126,15 +126,15 @@ class Interface {
   //--- delete the house add for the user (seller or admin) ---//
   static delete = async (houseID, email) => {
     try {
-      const user = await UserModel.findOne({email});
-        let updatedHouses = user.houses.filter((house) => {
-          if (house._id.toString() !== houseID) {
-            return house;
-          }
-        });
-        user.houses = updatedHouses;
-        const updatedUser = await user.save();
-        return updatedUser.houses;
+      const user = await UserModel.findOne({ email });
+      let updatedHouses = user.houses.filter((house) => {
+        if (house._id.toString() !== houseID) {
+          return house;
+        }
+      });
+      user.houses = updatedHouses;
+      const updatedUser = await user.save();
+      return updatedUser.houses;
     } catch (e) {
       console.log(e);
       throw new Error(e.message);
@@ -143,11 +143,11 @@ class Interface {
   }
 
   //--- update the status of the add by the adming ---//
-  static updateStatus = async (hosueID,email,stat)=>{
-    try{
-      const user = await UserModel.findOne({email});
-      const modifiedHouses = user.houses.map((house)=>{
-        if(house._id.toString() === hosueID){
+  static updateStatus = async (hosueID, email, stat) => {
+    try {
+      const user = await UserModel.findOne({ email });
+      const modifiedHouses = user.houses.map((house) => {
+        if (house._id.toString() === hosueID) {
           house.status = stat;
         }
         return house
@@ -155,7 +155,7 @@ class Interface {
       user.houses = modifiedHouses;
       const modifiedUser = await user.save();
       return modifiedUser.houses;
-    }catch(e){
+    } catch (e) {
       throw new Error(e.message);
     }
 
