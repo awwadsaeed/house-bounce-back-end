@@ -87,7 +87,7 @@ userSchema.statics.authenticateToken = async (token) => {
         if (user) {
             return user;
         }
-        throw new Error('User Not Registered');
+        throw new Error('Not Authorized');
     } catch (e) {
         throw new Error(e.message);
     };
