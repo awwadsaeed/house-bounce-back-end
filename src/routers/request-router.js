@@ -28,8 +28,14 @@ router.put('/updateStatus', bearer, acl('updateStatus'), updateStatusHandler);
 //---'/read' handler---//
 async function readHandler(req, res) {
     try {
-        const houses = await Interface.read(req.user);
-        res.status(201).json({ houses })
+        if(req.user.role=='seller'){
+            const houses = await Interface.read(req.user);
+            res.status(201).json({ houses });
+        }else if(req.user.role=='admin'){
+            const adminHouses = await Interface.read(req.user);
+            const chartStats = await Interface.getChartStats(adminHouses);
+            res.status(201).json({ houses:adminHouses,stats:chartStats });
+        }
     } catch (error) {
         res.json({ error: error.message });
     };
@@ -47,7 +53,7 @@ async function createHandler(req, res) {
             type,
             address,
             description,
-            sellingPrice:price,
+            sellingPrice: price,
             negotiable
         }
         let houses = await Interface.create(req.user.email, house);
@@ -74,7 +80,13 @@ async function deleteHandler(req, res) {
         const { houseID, ownerEmail } = req.body;
         console.log(houseID)
         let houses = await Interface.delete(houseID, ownerEmail);
-        res.status(201).json({ houses });
+        if (req.user.role === 'seller') {
+            res.status(201).json({ houses });
+        } else if (req.user.role === 'admin') {
+            const adminHouses = await Interface.read(req.user);
+            const chartStats = await Interface.getChartStats(adminHouses);
+            res.status(201).json({ houses:adminHouses,stats:chartStats })
+        }
     } catch (error) {
         res.json({ error: error.message });
     }
@@ -85,9 +97,11 @@ async function updateStatusHandler(req, res) {
 
     try {
         const { houseID, ownerEmail, stat } = req.body;
-   
+
         let houses = await Interface.updateStatus(houseID, ownerEmail, stat);
-        res.json({ houses });
+        const updatedHouses = await Interface.read(req.user);
+        const chartStats = await Interface.getChartStats(updatedHouses);
+        res.json({ houses:updatedHouses,stats:chartStats });
     } catch (e) {
         res.json({ error: error.message });
     }
