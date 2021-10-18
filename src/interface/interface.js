@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 
-const VERIFY_SECRET = process.env.VERIFY_SECRET;
+const SERVER = process.env.SERVER;
 const nodemailer = require('nodemailer');
 
 
@@ -45,7 +45,7 @@ class Interface {
         pass: process.env.PASSWORD,
       },
     });
-    let url = `${process.env.REDIRECT_NODEMAILER}/auth/verification/${token}`;
+    let url = `${SERVER}/auth/verification/${token}`;
 
 
     //---send mail with defined transport object---//
