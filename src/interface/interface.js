@@ -30,7 +30,7 @@ class Interface {
           email: record.email,
         },
       },
-      VERIFY_SECRET,
+      process.env.VERIFY_SECRET,
       {
         expiresIn: '3d',
       }
