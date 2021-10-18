@@ -83,12 +83,14 @@ class Interface {
 
     //---if user is admin---//
     if (user.role == 'admin') {
+
       const allUsers = await UserModel.find({});
       let allHouses = [];
       //---get all houses for the admin---//
       allUsers.forEach((user) => {
         allHouses = [...allHouses, ...user.houses]
       });
+
       user.houses = allHouses;
       return user.houses;
     }
@@ -116,7 +118,7 @@ class Interface {
       };
       return house;
     });
-    
+
     user.houses = newHouses;
     const newData = await user.save();
     return newData.houses;
@@ -159,6 +161,24 @@ class Interface {
       throw new Error(e.message);
     }
 
+  }
+  //---get chart stats for the admin ---//
+  static getChartStats = async (allHouses) => {
+    const chartStats = {
+      accepted: 0,
+      pending: 0,
+      regected: 0
+    };
+    allHouses.forEach((house) => {
+      if (house.status === 'Accepted') {
+        chartStats.accepted = chartStats.accepted + 1;
+      } else if (house.status === 'Regected') {
+        chartStats.regected = chartStats.regected + 1;
+      } else if (house.status === 'Pending') {
+        chartStats.pending = chartStats.pending + 1;
+      }
+    });
+    return chartStats;
   }
 
 
