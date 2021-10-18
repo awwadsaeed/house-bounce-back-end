@@ -5,7 +5,7 @@ const signup = require('../middlewares/signup-middleware');
 const basic = require('../middlewares/basic-auth-middleware');
 const verify = require('../middlewares/verify-middleware');
 require('dotenv').config();
-
+const REDIRECT_NODEMAILER = process.env.REDIRECT_NODEMAILER;
 
 //---sign up request---//
 router.post('/signup',signup,(req,res)=>{
@@ -30,7 +30,7 @@ router.post('/signin',basic,(req,res)=>{
 router.get('/verification/:token',verify, async (req, res) => {
     try{
         
-        return res.redirect(`http://localhost:5000/`);
+        return res.redirect(REDIRECT_NODEMAILER);
     }catch(error){
         res.status(error.status).json({error:error.message});
     }
